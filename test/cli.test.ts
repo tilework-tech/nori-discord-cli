@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { execFile, spawn } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -8,6 +9,9 @@ const exec = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CLI_PATH = path.resolve(__dirname, '../src/index.ts');
 const PROJECT_ROOT = path.resolve(__dirname, '..');
+
+// The /developers/docs/... URL shape 404s on the live Discord docs site.
+const DOCS_URL_PATTERN = /^https:\/\/docs\.discord\.com\/developers\/(?!docs\/)/;
 
 async function runCli(
   args: string[],
@@ -134,17 +138,32 @@ describe('CLI integration', () => {
     const output = JSON.parse(result.stdout);
     expect(output.routes.length).toBeGreaterThan(0);
     expect(output.routes.some((route: any) => route.method === 'POST' && route.path === '/channels/{channel_id}/messages')).toBe(true);
+
+    const all = await runCli(['list-routes']);
+    expect(all.exitCode).toBe(0);
+    for (const route of JSON.parse(all.stdout).routes) {
+      expect(route.docs_url).toMatch(DOCS_URL_PATTERN);
+    }
   });
 
   it('describes a known route and returns fallback docs for unknown routes', async () => {
     const known = await runCli(['describe', 'POST', '/channels/{channel_id}/messages']);
     expect(known.exitCode).toBe(0);
-    expect(JSON.parse(known.stdout).known).toBe(true);
+    const knownOutput = JSON.parse(known.stdout);
+    expect(knownOutput.known).toBe(true);
+    expect(knownOutput.docs_url).toBe('https://docs.discord.com/developers/resources/message#create-message');
 
     const unknown = await runCli(['describe', 'PATCH', '/new/discord/route']);
     expect(unknown.exitCode).toBe(0);
     const output = JSON.parse(unknown.stdout);
     expect(output.known).toBe(false);
-    expect(output.docs_url).toContain('docs.discord.com');
+    expect(output.docs_url).toMatch(DOCS_URL_PATTERN);
+  });
+
+  it('reports the package.json version from --version', async () => {
+    const pkg = JSON.parse(readFileSync(path.resolve(PROJECT_ROOT, 'package.json'), 'utf8'));
+    const result = await runCli(['--version']);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout.trim()).toBe(pkg.version);
   });
 });

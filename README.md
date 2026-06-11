@@ -17,7 +17,15 @@ Discord's REST API is documented for developers writing application code. This C
 
 ## Install
 
-From source:
+From npm:
+
+```bash
+npm install -g nori-discord-cli
+```
+
+The installed command is `nori-discord` (not the package name).
+
+From a clone of this repository (for contributors):
 
 ```bash
 npm install
@@ -92,6 +100,8 @@ The catalog is for agent discovery and suggestions only. Unknown routes can stil
 
 `DISCORD_BEARER_TOKEN` produces `Authorization: Bearer <token>` and takes precedence when set.
 
+`DISCORD_TOKEN_TYPE` overrides the `Bot` prefix used with `DISCORD_BOT_TOKEN` (it has no effect when `DISCORD_BEARER_TOKEN` is set).
+
 Dry runs never print token values. They report only whether a token is present and which authorization type would be used.
 
 ## Exit Codes
@@ -99,5 +109,17 @@ Dry runs never print token values. They report only whether a token is present a
 - `0` - success
 - `1` - Discord API error, network error, or missing token
 - `2` - bad CLI usage
+
+## Testing
+
+```bash
+npm test
+```
+
+Tests run the CLI as a subprocess and never call the real Discord API.
+
+## License
+
+See [LICENSE](LICENSE) and [LICENSE-ADDENDUM.txt](LICENSE-ADDENDUM.txt).
 
 Created and maintained by Nori.

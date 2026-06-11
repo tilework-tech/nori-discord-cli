@@ -2,19 +2,27 @@
   "name": "nori-discord-cli",
   "version": "0.1.0",
   "description": "CLI for interacting with the Discord REST API, designed for coding agents",
+  "license": "Apache-2.0",
   "type": "module",
   "bin": {
     "nori-discord": "./dist/index.js"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "LICENSE-ADDENDUM.txt"
   ],
   "scripts": {
     "build": "tsc",
     "postbuild": "chmod +x dist/index.js",
+    "dev": "tsx src/index.ts",
     "prepare": "npm run build",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {
     "commander": "^13.0.0"
