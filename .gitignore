@@ -3,3 +3,4 @@ dist/
 *.tgz
 npm-debug.log*
 .worktrees/
+.claude/
