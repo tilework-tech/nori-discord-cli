@@ -25,9 +25,11 @@ npm install -g nori-discord-cli
 
 The installed command is `nori-discord` (not the package name).
 
-From a clone of this repository (for contributors):
+From source (for contributors):
 
 ```bash
+git clone https://github.com/tilework-tech/nori-discord-cli.git
+cd nori-discord-cli
 npm install
 npm run build
 npm link

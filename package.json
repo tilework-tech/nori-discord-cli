@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "CLI for interacting with the Discord REST API, designed for coding agents",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tilework-tech/nori-discord-cli.git"
+  },
   "type": "module",
   "bin": {
     "nori-discord": "./dist/index.js"

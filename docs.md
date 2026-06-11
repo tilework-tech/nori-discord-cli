@@ -11,7 +11,7 @@ Path: @/
 ### How it fits into the larger codebase
 
 - Intended as the Discord counterpart to `tilework-tech/nori-slack-cli`, but it uses generic HTTP requests instead of a service SDK so the CLI can call any Discord REST route.
-- Publish packaging mirrors the published `nori-luma-cli` package: Apache-2.0 in @/LICENSE plus the Ship of Theseus addendum in @/LICENSE-ADDENDUM.txt, and @/package.json carries the license, engines, and `prepublishOnly` (build plus test gate) metadata. Like `nori-luma-cli`, there is no `repository` field: the GitHub repo is not public, so a repo link on the npm listing would 404.
+- Publish packaging mirrors the published `nori-luma-cli` package: Apache-2.0 in @/LICENSE plus the Ship of Theseus addendum in @/LICENSE-ADDENDUM.txt, and @/package.json carries the license, repository, engines, and `prepublishOnly` (build plus test gate) metadata. Unlike `nori-luma-cli`, the `repository` field is set: the GitHub repo is public, so the npm listing links back to it.
 - Can be bundled into Nori Sessions later through the same bootstrap npm-tarball path used for `nori-slack-cli`; that integration is deliberately separate from this package.
 - Discord permissions, bot membership, OAuth scopes, and token type are the authorization boundary. The CLI does not enforce Nori-specific policy or endpoint allowlists.
 - Route discovery is local metadata for agent ergonomics. It is not a gate on the request surface.
