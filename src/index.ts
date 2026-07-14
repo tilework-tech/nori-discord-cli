@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { formatError } from './errors.js';
 import { parseArgs } from './parse-args.js';
@@ -10,7 +11,12 @@ import { describeRoute, listRoutes } from './routes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SOURCE_DIR = path.resolve(__dirname, '..');
-const USER_AGENT = 'DiscordBot (https://noriagentic.com, nori-discord-cli/0.1.0)';
+// Read from package.json (stamped from the git tag at release time) so --version
+// and the User-Agent always reflect the installed build, not a stale literal.
+const VERSION = JSON.parse(
+  readFileSync(path.join(SOURCE_DIR, 'package.json'), 'utf-8'),
+).version as string;
+const USER_AGENT = `DiscordBot (https://noriagentic.com, nori-discord-cli/${VERSION})`;
 
 const program = new Command();
 
@@ -113,7 +119,7 @@ program
   .description(
     'CLI for the Discord REST API. Designed for coding agents.\n\nUsage: nori-discord <HTTP_METHOD> <PATH> [--param value ...]\n\nExamples:\n  nori-discord GET /channels/123/messages --limit 10\n  nori-discord POST /channels/123/messages --content "hello"\n  echo \'{"content":"hi"}\' | nori-discord POST /channels/123/messages --json-input'
   )
-  .version('0.1.0');
+  .version(VERSION);
 
 program
   .command('list-routes')
