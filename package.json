@@ -1,6 +1,6 @@
 {
   "name": "nori-discord-cli",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "CLI for interacting with the Discord REST API, designed for coding agents",
   "license": "Apache-2.0",
   "repository": {
@@ -26,7 +26,8 @@
     "prepare": "npm run build",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepublishOnly": "npm run build && npm test"
+    "prepublishOnly": "npm run build && npm test",
+    "release": "node scripts/create-release.mjs"
   },
   "dependencies": {
     "commander": "^13.0.0"
